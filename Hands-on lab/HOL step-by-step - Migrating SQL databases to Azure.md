@@ -768,84 +768,64 @@ Because the application utilizes an ORM, there are not many ad-hoc SQL queries t
 
 ### Task 2: Deploy the web app to Azure
 
-In this task, you create an RDP connection to the JumpBox VM and then, using Visual Studio on the JumpBox, deploy the `WideWorldImporters` web application into the App Service in Azure.
+In this task, you connect to the JumpBox VM and then, using Visual Studio on the JumpBox, deploy the `WideWorldImporters` web application into the App Service in Azure.
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** in the Azure navigation pane and select the **hands-on-lab-SUFFIX** resource group from the list.
+1. Navigate to the Cloud Labs environment and select **Environment Details**, then click **Go To JumpBox**.
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
+   > When connecting for the first time, the virtual machine may be stopped. In this case, the lab portal will show a message that the virtual machine is starting. Allow 1-2 minutes for the virtual machine to became available and try again.
 
-2. In the list of resources for your resource group, select the JumpBox VM.
+   ![JumpBox RDP connection from browser](media/connect-to-vm-jumpbox.png "Cloud Labs")
 
-   ![The list of resources in the hands-on-lab-SUFFIX resource group are displayed, and JumpBox is highlighted.](./media/resource-group-resources-jumpbox.png "JumpBox in resource group list")
 
-3. On your JumpBox VM blade, select **Connect** and **RDP** from the top menu.
-
-   ![The JumpBox VM blade is displayed, with the Connect button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to JumpBox VM")
-
-4. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
-
-5. Select **Connect** on the Remote Desktop Connection dialog.
-
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection.png "Remote Desktop Connection dialog")
-
-6. Enter the following credentials when prompted, and then select **OK**:
-
-   - **Username**: `sqlmiuser`
-   - **Password**: Use the password provided during the ARM template deployment (the default is `Password.1234567890`)
-
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials.png "Enter your credentials")
-
-7. Select **Yes** to connect if prompted the remote computer's identity cannot be verified.
-
-   ![In the Remote Desktop Connection dialog box, a warning states the remote computer's identity cannot be verified and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-jumpbox.png "Remote Desktop Connection dialog")
-
-8. Once logged in, open File Explorer by selecting it in the Windows start bar.
+2. Once logged in, open File Explorer by selecting it in the Windows start bar.
 
    ![The File Explorer icon is highlighted in the Windows start bar.](media/windows-2019-start-bar-file-explorer.png "Windows start bar")
 
-9. In the File Explorer dialog, navigate to the `C:\hands-on-lab` folder and then drill down to `Migrating-SQL-databases-to-Azure-main\Hands-on lab\lab-files`. In the `lab-files` folder, double-click `WideWorldImporters.sln` to open the solution in Visual Studio.
+3. In the File Explorer dialog, navigate to the `C:\hands-on-lab` folder and then drill down to `Migrating-SQL-databases-to-Azure-main\Hands-on lab\lab-files`. In the `lab-files` folder, double-click `WideWorldImporters.sln` to open the solution in Visual Studio.
 
    ![WideWorldImporters.sln is highlighted in the folder at the aforementioned path.](media/windows-explorer-lab-files-web-solution.png "Windows Explorer")
 
-10. If prompted about how you want to open the file, select **Visual Studio 2019**, and then select **OK**.
+4. If prompted about how you want to open the file, select **Visual Studio 2019**, and then select **OK**.
 
     ![In the Visual Studio version selector, Visual Studio 2019 is selected and highlighted.](media/visual-studio-version-selector.png "Visual Studio")
 
-11. Select **Sign in** and enter your Azure account credentials when prompted.
+5. Select **Sign in** and enter your Azure account credentials when prompted. Use the credentials listed in the Cloud Labs environment.
 
     ![On the Visual Studio welcome screen, the Sign in button is highlighted.](media/visual-studio-sign-in.png "Visual Studio")
 
-12. If you receive a security warning prompt, uncheck **Ask me for every project in this solution**, and then select **OK**.
+   ![This image shows how to retrieve the credentials to connect to Azure Portal.](./media/connect-to-portal-credentials.png "Connect to Azure Portal")
+
+6. If you receive a security warning prompt, uncheck **Ask me for every project in this solution**, and then select **OK**.
 
     ![A Visual Studio security warning is displayed, and the Ask me for every project in this solution checkbox is unchecked and highlighted.](media/visual-studio-security-warning.png "Visual Studio")
 
-13. Once logged into Visual Studio, right-click the `WideWorldImporters.Web` project in the Solution Explorer, and then select **Publish**.
+7. Once logged into Visual Studio, right-click the `WideWorldImporters.Web` project in the Solution Explorer, and then select **Publish**.
 
     ![In the Solution Explorer, the context menu for the WideWorldImporters.Web project is displayed, and Publish is highlighted.](media/visual-studio-project-publish.png "Visual Studio")
 
-14. On the **Publish** dialog, select **Azure** in the Target box, and select **Next**.
+8. On the **Publish** dialog, select **Azure** in the Target box, and select **Next**.
 
     ![In the Publish dialog, Azure is selected and highlighted in the Target box. The Next button is highlighted.](media/vs-publish-to-azure.png "Publish API App to Azure")
 
-15. Next, in the **Specific target** box, select **Azure App Service (Windows)**.
+9. Next, in the **Specific target** box, select **Azure App Service (Windows)**.
 
     ![In the Publish dialog, Azure App Service (Windows) is selected and highlighted in the Specific Target box. The Next button is highlighted.](media/vs-publish-specific-target.png "Publish API App to Azure")
 
-16. Finally, in the **App Service** box, select your subscription, expand the hands-on-lab-SUFFIX resource group, and select the `wwi-web-UNIQUEID` Web App.
+10. Finally, in the **App Service** box, select your subscription, expand the resource group, and select the `wwi-web-UNIQUEID` Web App.
 
-17. Select **Finish**.
+11. Select **Finish**.
 
     ![In the Publish dialog, The wwi-web-UNIQUEID Web App is selected and highlighted under the hands-on-lab-SUFFIX resource group.](media/vs-publish-web-app-service.png "Publish API App to Azure")
 
-18. Back on the Visual Studio Publish page for the `WideWorldImporters.Web` project, select **Publish** to start the process of publishing the ASP.NET Core web application to Azure App Service.
+12. Back on the Visual Studio Publish page for the `WideWorldImporters.Web` project, select **Publish** to start the process of publishing the ASP.NET Core web application to Azure App Service.
 
     ![The Publish button is highlighted on the Publish page in Visual Studio.](media/visual-studio-publish-web-app.png "Publish")
 
-19. When the publish completes, you will see a message on the Visual Studio Output page the publish succeeded.
+13. When the publish completes, you will see a message on the Visual Studio Output page the publish succeeded.
 
     ![The Publish Succeeded message is displayed in the Visual Studio Output pane.](media/visual-studio-output-publish-succeeded.png "Visual Studio")
 
-20. If you select the link of the published web app from the Visual Studio output window, an error page is returned because the database connection strings have not been updated to point to the SQL MI database. You address this in the next task.
+14. If you select the link of the published web app from the Visual Studio output window, an error page is returned because the database connection strings have not been updated to point to the SQL MI database. You address this in the next task.
 
     ![An error screen is displayed because the database connection string has not been updated to point to SQL MI in the web app's configuration.](media/web-app-error-screen.png "Web App error")
 
@@ -853,17 +833,11 @@ In this task, you create an RDP connection to the JumpBox VM and then, using Vis
 
 In this task, you update the WWI gamer info web application to connect to and utilize the SQL MI database.
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+1. In the [Azure portal](https://portal.azure.com), search for **App Services** and select the **App Service** item from the drop down list.
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+3. In the list of app services, select the **wwi-web-UNIQUEID** App Service from the list of resources.
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
-
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. In the list of resources for your resource group, select the **hands-on-lab-SUFFIX** resource group, and then select the **wwi-web-UNIQUEID** App Service from the list of resources.
-
-   ![The wwi-web-UNIQUEID App Service is highlighted in the list of resource group resources.](media/rg-app-service.png "Resource group")
+   ![The wwi-web-UNIQUEID App Service is highlighted in the list of app services.](media/portal-app-service-search.png "App Services")
 
 4. On the App Service blade, select **Configuration** under Settings on the left-hand side.
 
@@ -978,9 +952,7 @@ Point-to-Site connections use certificates to authenticate. Each client computer
 
 In this task, you configure the client address pool. The address pool is a range of private IP addresses that you specify below. Clients that connect over a Point-to-Site VPN dynamically receive an IP address from this range. You use a private IP address range that does not overlap with the VNet.
 
-1. Navigate to the **hands-on-lab-SUFFIX-vnet-gateway** Virtual network gateway in the [Azure portal](https://portal.azure.com) by selecting it from the list of resources in the hands-on-lab-SUFFIX resource group.
-
-   ![The Virtual network gateway resource is highlighted in the list of resources.](media/resource-group-vnet-gateway.png "Resources")
+1. In the [Azure portal](https://portal.azure.com), search for `cloud-rg-vnet-gateway` and select the Virtual network gateway in the drop down list.
 
 2. On the virtual network gateway blade, select **Point-to-site configuration** under Settings in the left-hand menu, and then select **Configure now**.
 
@@ -990,7 +962,7 @@ In this task, you configure the client address pool. The address pool is a range
 
    - **Address pool (1)**: Add a private IP address range that you want to use. The address space must be in one of the following address blocks but should not overlap the address space used by the VNet.
      - `10.0.0.0/8` - This means an IP address range from 10.0.0.0 to 10.255.255.255
-     - `172.16.0.0/12` - This means an IP address range from 172.16.0.0 to 172.31.255.255
+     - **[Use this]** `172.16.0.0/12` - This means an IP address range from 172.16.0.0 to 172.31.255.255
      - `192.168.0.0/16` - This means an IP address range from 192.168.0.0 to 192.168.255.255
    - **Tunnel type (2)**: Select **SSTP (SSL)**.
    - **Authentication type (3)**: Choose **Azure certificate**.
@@ -1009,9 +981,7 @@ In this task, you configure the client address pool. The address pool is a range
 
 In this task, you add the networking configuration to your App Service to enable communication with resources in the VNet.
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the left-hand menu, select the **hands-on-lab-SUFFIX** resource group and then select the **wwi-web-UNIQUEID** App Service from the list of resources.
-
-   ![The wwi-web-UNIQUEID App Service is highlighted in the list of resource group resources.](media/rg-app-service.png "Resource group")
+1. In the [Azure portal](https://portal.azure.com), search for `wwi-web-` and select the app service from the drop down list.
 
 2. On the App Service blade, select **Networking** from the left-hand menu and then select **VNet integration**.
 
@@ -1023,11 +993,7 @@ In this task, you add the networking configuration to your App Service to enable
 
 4. On the **Add VNet Integration** dialog, enter the following:
 
-   - **Virtual Network**: Select the hands-on-lab-SUFFIX-vnet.
-   - **Subnet**: Select Create New Subnet.
-   - **Subnet Name**: Enter WebAppSubnet.
-   - **Virtual Network Address Block**: Select the only option under this dropdown, 10.x.0.0/16.
-   - **Subnet Address Block**: Enter a subnet with a /24 block, such as 10.x.3.0/24.
+   - **Virtual Network**: Select the cloud-rg-vnet.
 
    ![The values specified above are entered into the Add VNet Integration dialog.](media/app-service-vnet-add-vnet-integration.png "Add VNet Integration configuration")
 
@@ -1365,23 +1331,13 @@ In this exercise, you examine how you can use the automatically created online s
 
 In this task, you open a web report using the web application you deployed to your App Service.
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+1. In the [Azure portal](https://portal.azure.com), search for `wwi-web-` and select the App Service from the drop down list.
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
-
-2. Select the hands-on-lab-SUFFIX resource group from the list.
-
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. In the hands-on-lab-SUFFIX resource group, select the **wwi-web-UNIQUEID** App Service from the list of resources.
-
-   ![The App Service resource is selected from the list of resources in the hands-on-lab-SUFFIX resource group.](media/rg-app-service.png "hands-on-lab-SUFFIX resource group")
-
-4. On the App Service overview blade, select the **URL** to open the web application in a browser window.
+2. On the App Service overview blade, select the **URL** to open the web application in a browser window.
 
    ![The App service URL is highlighted.](media/app-service-url.png "App service URL")
 
-5. In the WideWorldImporters web app, select **Leaderboard** from the menu.
+3. In the WideWorldImporters web app, select **Leaderboard** from the menu.
 
    ![READ_WRITE is highlighted on the Leaderboard page.](media/gamer-leaderboard-read-write.png "Gamer Leaderboard within the Web App")
 
