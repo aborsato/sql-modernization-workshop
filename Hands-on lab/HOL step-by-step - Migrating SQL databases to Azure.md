@@ -1,16 +1,11 @@
-![Microsoft Cloud Workshops](https://github.com/Microsoft/MCW-Template-Cloud-Workshop/raw/main/Media/ms-cloud-workshop.png "Microsoft Cloud Workshops")
+SQL and Apps Modernization Workshop
 
-<div class="MCWHeader1">
 Migrating SQL databases to Azure
-</div>
 
-<div class="MCWHeader2">
 Hands-on lab step-by-step guide
-</div>
 
-<div class="MCWHeader3">
-October 2021
-</div>
+December 2021
+
 
 Information in this document, including URL and other Internet Web site references, is subject to change without notice. Unless otherwise noted, the example companies, organizations, products, domain names, e-mail addresses, logos, people, places, and events depicted herein are fictitious, and no association with any real company, organization, product, domain name, e-mail address, logo, person, place or event is intended or should be inferred. Complying with all applicable copyright laws is the responsibility of the user. Without limiting the rights under copyright, no part of this document may be reproduced, stored in or introduced into a retrieval system, or transmitted in any form or by any means (electronic, mechanical, photocopying, recording, or otherwise), or for any purpose, without the express written permission of Microsoft Corporation.
 
@@ -118,48 +113,21 @@ In this exercise, you use the Microsoft Data Migration Assistant (DMA) to perfor
 
 In this task, you perform some configuration for the `WideWorldImporters` database on the SQL Server 2008 R2 instance to prepare it for migration.
 
-1. Navigate to the [Azure portal](https://portal.azure.com) and select **Resource groups** from the Azure services list.
+1. Navigate to the Cloud Labs environment and select **Environment Details**, then click **Go To SqlServer2008**.
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+   > When connecting for the first time, the virtual machine may be stopped. In this case, the lab portal will show a message that the virtual machine is starting. Allow 1-2 minutes for the virtual machine to became available and try again.
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+   ![Sql Server 2008 RDP connection from browser](media/connect-to-vm-sqlserver.png "Cloud Labs")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. In the list of resources for your resource group, select the SqlServer2008 VM.
-
-   ![The SqlServer2008 VM is highlighted in the list of resources.](media/resource-list-sqlserver2008.png "Resource list")
-
-4. On the SqlServer2008 VM blade in the Azure portal, select **Overview** from the left-hand menu, and then select **Connect** and **RDP** on the top menu, as you've done previously.
-
-   ![The SqlServer2008 VM blade is displayed, with the Connect button highlighted in the top menu.](./media/connect-vm-rdp.png "Connect to SqlServer2008 VM")
-
-5. On the Connect with RDP blade, select **Download RDP File**, then open the downloaded RDP file.
-
-6. Select **Connect** on the Remote Desktop Connection dialog.
-
-   ![In the Remote Desktop Connection Dialog Box, the Connect button is highlighted.](./media/remote-desktop-connection-sql-2008.png "Remote Desktop Connection dialog")
-
-7. Enter the following credentials when prompted, and then select **OK**:
-
-   - **Username**: `sqlmiuser`
-   - **Password**: The password provided in the ARM template (default is `Password.1234567890`)
-
-   ![The credentials specified above are entered into the Enter your credentials dialog.](media/rdc-credentials-sql-2008.png "Enter your credentials")
-
-8. Select **Yes** to connect if prompted the remote computer's identity cannot be verified.
-
-   ![In the Remote Desktop Connection dialog box, a warning states the remote computer's identity cannot be verified and asks if you want to continue anyway. At the bottom, the Yes button is circled.](./media/remote-desktop-connection-identity-verification-sqlserver2008.png "Remote Desktop Connection dialog")
-
-9. Once logged in, open **Microsoft SQL Server Management Studio 17** (SSMS) by entering "SQL Server" into the search bar in the Windows Start menu and selecting **Microsoft SQL Server Management Studio 17** from the search results.
+1. Once logged in, open **Microsoft SQL Server Management Studio 17** (SSMS) by entering "SQL Server" into the search bar in the Windows Start menu and selecting **Microsoft SQL Server Management Studio 17** from the search results.
 
    ![SQL Server is entered into the Windows Start menu search box, and Microsoft SQL Server Management Studio 17 is highlighted in the search results.](media/start-menu-ssms-17.png "Windows start menu search")
 
-10. In the SSMS **Connect to Server** dialog, enter **SQLSERVER2008** into the Server name box, ensure **Windows Authentication** is selected, and then select **Connect**.
+1. In the SSMS **Connect to Server** dialog, enter **SQLSERVER2008** into the Server name box, ensure **Windows Authentication** is selected, and then select **Connect**.
 
     ![The SQL Server Connect to Search dialog is displayed, with SQLSERVER2008 entered into the Server name and Windows Authentication selected.](media/sql-server-connect-to-server.png "Connect to Server")
 
-11. Once connected, verify you see the `WideWorldImporters` database listed under databases.
+1. Once connected, verify you see the `WideWorldImporters` database listed under databases.
 
     ![The WideWorldImporters database is highlighted under Databases on the SQLSERVER2008 instance.](media/wide-world-importers-database.png "WideWorldImporters database")
 
@@ -169,26 +137,30 @@ In this Task, you will use Azure Migrate to create a project to consolidate your
 
 Azure Migrate is useful for large migrations of apps, servers, and data, as it assists migration teams to decide the optimal resource SKUs for the Azure landing zone and explore the relationships between on-premises applications and data. To learn more about this powerful tool, consult the [documentation.](https://docs.microsoft.com/azure/migrate/)
 
-1. In the global search at the top of the [Azure Portal](portal.azure.com), query for and select **Azure Migrate**.
+1. From the **SqlServer2008** RDP connection, open Edge, then connect to [Azure Portal](portal.azure.com) using the credentials listed in the Cloud Labs environment.
+
+   ![This image shows how to retrieve the credentials to connect to Azure Portal.](./media/connect-to-portal-credentials.png "Connect to Azure Portal")
+
+1. In the global search at the top of the Azure Portal, query for and select **Azure Migrate**.
 
    ![This image highlights Azure Migrate in the global search results.](./media/select-azure-migrate-portal.png "Selecting Azure Migrate from global search")
 
-2. Select **Assess and migrate databases** on the **Get started** page.
+1. Select **Assess and migrate databases** on the **Get started** page.
 
    ![This image highlights the Assess and migrate databases button on the Get started page of Azure Migrate.](./media/azure-migrate-in-portal.png "Assess and migrate databases button in Azure Migrate")
 
-3. Select **Create project**. On the **Create project** page, provide the following information:
+1. Select **Create project**. On the **Create project** page, provide the following information:
 
    - **Subscription**: Use the Azure Subscription you provisioned your lab resources in
-   - **Resource group**: Select the resource group you selected during the ARM template deployment
+   - **Resource group**: Select `on-premises` resource group
    - **Project**: Use `wwi-sql-migrate-SUFFIX` as the project name
    - **Geography**: Select the nearest geographic region from the dropdown
 
    ![This image highlights the above parameters in the Create project page.](./media/azure-migrate-project-details.png "Create project page parameters")
 
-4. Select **Create**.
+1. Select **Create**.
 
-5. After the project provisions, observe the **Assessment tools** and **Migration tools** sections. We will be using the mentioned **Data Migration Assessment** tool to determine whether Azure SQL Database or Azure SQL Managed Instance is the preferred target for WWI's migration.
+1. After the project provisions, observe the **Assessment tools** and **Migration tools** sections. We will be using the mentioned **Data Migration Assessment** tool to determine whether Azure SQL Database or Azure SQL Managed Instance is the preferred target for WWI's migration.
 
    ![This image highlights the Assessment tools section of the Databases (only) page in Azure Migrate.](./media/azure-migrate-dma-mention.png "Assessment tools box in Azure Migrate")
 
@@ -435,7 +407,7 @@ To perform online data migrations, DMS looks for database and transaction log ba
 
    ![The OK button is highlighted on the Select Backup Destination dialog and C:\dms-backups\WideWorldImporters.bak is entered in the File name textbox.](media/ssms-backup-destination.png "Backup Destination")
 
-9. In the Back Up Database dialog, select **Media Options** in the Select a page pane, and then set the following:
+9. In the Back Up Database dialog, select **Options** in the Select a page pane, and then set the following:
 
    - Select **Back up to the existing media set** and then select **Overwrite all existing backup sets**.
    - Under Reliability, check the box for **Perform checksum before writing to media**. A checksum is required by DMS when using the backup to restore the database to SQL MI.
@@ -472,12 +444,14 @@ In this task, you use the Azure Cloud shell to retrieve the information necessar
 
    ![In the Azure Cloud Shell dialog, a message is displayed that requesting a Cloud Shell succeeded, and the PS Azure prompt is displayed.](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
 
-5. At the prompt, retrieve the public IP address of the SqlSerer2008 VM. This IP address will be used to connect to the database on that server. Enter the following PowerShell command, **replacing `<your-resource-group-name>`** in the resource group name variable with the name of your resource group:
+5. At the prompt, retrieve the public IP address of the SqlSerer2008 VM. This IP address will be used to connect to the database on that server. Enter the following PowerShell command:
 
    ```powershell
-   $resourceGroup = "<your-resource-group-name>"
+   $resourceGroup = "onpremises-rg"
    az vm list-ip-addresses -g $resourceGroup -n SqlServer2008 --output table
    ```
+
+   > **Tip**: When copying and pasting commands, use `Ctrl+Shift+V` to paste to the PowerShell window.
 
    > **Note**: If you have multiple Azure subscriptions, and the account you are using for this hands-on lab is not your default account, you may need to run `az account list --output table` at the Azure Cloud Shell prompt to output a list of your subscriptions, then copy the Subscription Id of the account you are using for this lab and then run `az account set --subscription <your-subscription-id>` to set the appropriate account for the Azure CLI commands.
 
@@ -507,41 +481,45 @@ In this task, use the Azure Cloud Shell to create an Azure Active Directory (Azu
    $subscriptionId = "<your-subscription-id>"
    ```
 
-4. Next, enter the following `az ad sp create-for-rbac` command at the Cloud Shell prompt and then press `Enter` to run the command.
+4. In the Cloud Lab portal, select **Environment Details** tab, **Service Principal Details** and copy the **Application Id** credentials.
+
+   ![The service principal's application ID is listed in the Cloud Lab under Service Principal Details.](media/lab-environment-application-id.png "Service Principal Details")
+
+5. Run this command in at the CLI command prompt:
 
    ```powershell
-   az ad sp create-for-rbac -n "https://wide-world-importers" --role contributor --scopes subscriptions/$subscriptionId/resourceGroups/$resourceGroup
+   $applicationId = "[Application Id]"
    ```
 
-5. Copy the output from the command into a text editor, as you need the `appId` and `password` in the next task. The output should be similar to:
-
-   ```json
-   {
-     "appId": "aeab3b83-9080-426c-94a3-4828db8532e9",
-     "displayName": "wide-world-importers",
-     "name": "https://wide-world-importers",
-     "password": "hd_42~OwuFk.mp1BQ8l6nKkzOLzg5vrQpC",
-     "tenant": "d280491c-b27a-XXXX-XXXX-XXXXXXXXXXXX"
-   }
-   ```
-
-6. To verify the role assignment, select **Access control (IAM)** from the left-hand menu of the **hands-on-lab-SUFFIX** resource group blade, and then select the **Role assignments** tab and locate **wide-world-importers** under the `Contributor` role.
-
-   ![The Role assignments tab is displayed, with wide-world-importers highlighted under Contributor in the list.](media/rg-hands-on-lab-role-assignments.png "Role assignments")
-
-7. Next, issue another command to grant the `Contributor` role at the subscription level to the newly created service principal. At the Cloud Shell prompt, run the following command:
+6. Give permission (at subscription level) to the app so it can run the migration project:
 
    ```powershell
-   az role assignment create --assignee https://wide-world-importers --role contributor
+   az role assignment create --assignee $applicationId --role contributor
+   ```
+
+6. Run this command to see the list of RBAC assignments for this service principal:
+
+   ```powershell
+   az role assignment list --all --assignee $applicationId --query "[].{role:roleDefinitionName, scope:scope}" --output table
+   ```
+
+   The command should show an output like this:
+
+   ```
+   Role         Scope
+   -----------  --------------------------------------------------------------------------------
+   Contributor  /subscriptions/00000000-0000-0000-0000-000000000000
+   Contributor  /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/onpremises-rg
+   Contributor  /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/cloud-rg
    ```
 
 ### Task 6: Create and run an online data migration project
 
 In this task, you create a new online data migration project in DMS for the `WideWorldImporters` database.
 
-1. In the [Azure portal](https://portal.azure.com), navigate to the Azure Database Migration Service by selecting **Resource groups** from the left-hand navigation menu, the **hands-on-lab-SUFFIX** resource group, and the **wwi-dms** Azure Database Migration Service from the list of resources.
+1. In the [Azure portal](https://portal.azure.com), navigate to the Azure Database Migration Service by selecting **Resource groups** from the left-hand navigation menu, the **onpremises-rg** resource group, and the **wwi-dms** Azure Database Migration Service from the list of resources.
 
-   ![The wwi-dms Azure Database Migration Service is highlighted in the list of resources in the hands-on-lab-SUFFIX resource group.](media/resource-group-dms-resource.png "Resources")
+   ![The wwi-dms Azure Database Migration Service is highlighted in the list of resources in the onpremises-rg resource group.](media/resource-group-dms-resource.png "Resources")
 
 2. On the Azure Database Migration Service blade, select **+New Migration Project**.
 
@@ -574,8 +552,8 @@ In this task, you create a new online data migration project in DMS for the `Wid
 
 7. On the Migration Wizard **Select target** tab, enter the following:
 
-   - **Application ID**: Enter the `appId` value from the output of the `az ad sp create-for-rbac' command you executed in the last task.
-   - **Key**: Enter the `password` value from the output of the `az ad sp create-for-rbac' command you executed in the last task.
+   - **Application ID**: Enter the `$applicationId` value from Task 5.
+   - **Key**: Enter the `Secret Key` value from the Cloud Labs portal > Environment Details > Service Principal Details.
    - **Target Azure SQL Managed Instance**: Select the sqlmi-UNIQUEID instance.
    - **SQL Username**: Enter `sqlmiuser`
    - **Password**: Enter the password used in the ARM template deployment (the default is `Password.1234567890`)
@@ -611,7 +589,7 @@ In this task, you create a new online data migration project in DMS for the `Wid
 
     ![In the migration monitoring window, a status of Log shipping in progress is highlighted.](media/dms-migration-wizard-status-log-files-uploading.png "Migration status")
 
-You can leave the Azure Portal browser window open and come back to check that migration is complete. This is a perfect time for a break.
+You can leave the Azure Portal browser window open and come back to check that migration is complete. **It may take 20-30 minutes to complete**, so, this is a perfect time for a break!
 
 ### Task 7: Perform migration cutover
 
@@ -706,7 +684,7 @@ In this task, you connect to the SQL MI database using SSMS and quickly verify t
 4. At the prompt, retrieve information about SQL MI in the hands-on-lab-SUFFIX resource group by entering the following PowerShell command, **replacing `<your-resource-group-name>`** in the resource group name variable with the name of your resource group:
 
    ```powershell
-   $resourceGroup = "<your-resource-group-name>"
+   $resourceGroup = "cloud-rg"
    az sql mi list --resource-group $resourceGroup
    ```
 
