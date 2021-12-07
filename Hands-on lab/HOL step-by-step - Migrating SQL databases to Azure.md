@@ -60,9 +60,6 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 1: View Leaderboard report in the WideWorldImporters web application](#task-1-view-leaderboard-report-in-the-wideworldimporters-web-application)
     - [Task 2: Update read-only connection string](#task-2-update-read-only-connection-string)
     - [Task 3: Reload Leaderboard report in the web app](#task-3-reload-leaderboard-report-in-the-web-app)
-  - [After the hands-on lab](#after-the-hands-on-lab)
-    - [Task 1: Delete Azure resource groups](#task-1-delete-azure-resource-groups)
-    - [Task 2: Delete the wide-world-importers service principal](#task-2-delete-the-wide-world-importers-service-principal)
 
 <!-- TOC -->
 
@@ -1383,22 +1380,3 @@ In this task, you refresh the Leaderboard report in the WideWorldImporters web a
 
    > Notice the `updateability` option is now displaying as `READ_ONLY`. With a simple addition to your database connection string, queries can be sent to an online secondary of your SQL MI Business-critical database. This setting allows for load-balancing read-only workloads using the capacity of one read-only replica. The SQL MI Business Critical cluster has a built-in Read Scale-Out capability that provides a free-of-charge built-in read-only node that can be used to run read-only queries that should not affect the performance of your primary workload.
 
-## After the hands-on lab
-
-Duration: 10 minutes
-
-In this exercise, you will de-provision all Azure resources that you created in support of this hands-on lab.
-
-### Task 1: Delete Azure resource groups
-
-1. In the Azure portal, select **Resource groups** from the left-hand menu, and locate and delete the **hands-on-lab-SUFFIX** following resource group.
-
-   > **Note**: Deleting a resource group containing SQL MI does not always work the first time. The deletion failure can result in a few networking components (route table, SQL MI NSG, and VNet) remaining in the resource group, along with the SQL MI instance, after the first delete attempt. In this case, wait for the first process to complete, and then attempt to delete the resource group a second time. _You may need to allow several hours or more between delete attempts_.
-
-### Task 2: Delete the wide-world-importers service principal
-
-1. In the Azure portal, select **Azure Active Directory** and then select **App registrations**.
-
-2. Select the **wide-world-importers** application and select **Delete** on the application blade.
-
-You should follow all steps provided _after_ attending the Hands-on lab.
