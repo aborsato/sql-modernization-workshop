@@ -518,6 +518,10 @@ In this task, you create a new online data migration project in DMS for the `Wid
 
    ![The wwi-dms Azure Database Migration Service is highlighted in the list of resources in the onpremises-rg resource group.](media/resource-group-dms-resource.png "Resources")
 
+   If the service is not running, click *Start Service*:
+
+   ![On the Azure Database Migration Service blade, click Start Service.](media/dms-start-service.png "Azure Database Migration Service Start Service")
+
 2. On the Azure Database Migration Service blade, select **+New Migration Project**.
 
    ![On the Azure Database Migration Service blade, +New Migration Project is highlighted in the toolbar.](media/dms-add-new-migration-project.png "Azure Database Migration Service New Project")
@@ -549,9 +553,9 @@ In this task, you create a new online data migration project in DMS for the `Wid
 
 7. On the Migration Wizard **Select target** tab, enter the following:
 
-   - **Application ID**: Enter the `$applicationId` value from Task 5.
-   - **Key**: Enter the `Secret Key` value from the Cloud Labs portal > Environment Details > Service Principal Details.
-   - **Target Azure SQL Managed Instance**: Select the sqlmi-UNIQUEID instance.
+   - **Application ID**: Enter the `Application Id` from Cloud Labs portal > Environment Details > Service Principal Details.
+   - **Key**: Enter the `Secret Key` value from Cloud Labs portal > Environment Details > Service Principal Details.
+   - **Target Azure SQL Managed Instance**: Select the sqlmi-UNIQUEID instance from the dropdown list.
    - **SQL Username**: Enter `sqlmiuser`
    - **Password**: Enter the password used in the ARM template deployment (the default is `Password.1234567890`)
 
@@ -620,9 +624,17 @@ Since you performed an "online data migration," the migration wizard continuousl
 
    ![The Execute button is highlighted in the SSMS toolbar.](media/ssms-execute.png "SSMS Toolbar")
 
-7. After adding the new record to the `Games` table, back up the transaction logs. DMS detects any new backups and ships them to the migration service. Select **New Query** again in the toolbar, and type the commands in the image below.
+7. After adding the new record to the `Games` table, back up the transaction logs. DMS detects any new backups and ships them to the migration service. Select **New Query** again in the toolbar, and type the commands below.
 
-   ![This image shows the commands executed in the SQL Server system database to create a transaction log backup.](./media/system-database-create-transaction-log-backup.png "Creating a transaction log backup")
+```sql
+USE master;
+GO
+
+BACKUP LOG WideWorldImporters
+TO DISK = 'C:\dms-backups\WideWorldImportersLog.trn'
+WITH CHECKSUM
+GO
+```
 
 8. Execute the query by selecting **Execute** in the SSMS toolbar.
 
