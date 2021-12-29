@@ -507,7 +507,6 @@ In this task, use the Azure Cloud Shell to create an Azure Active Directory (Azu
    -----------  --------------------------------------------------------------------------------
    Contributor  /subscriptions/00000000-0000-0000-0000-000000000000
    Contributor  /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/onpremises-rg
-   Contributor  /subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/cloud-rg
    ```
 
 ### Task 6: Create and run an online data migration project
