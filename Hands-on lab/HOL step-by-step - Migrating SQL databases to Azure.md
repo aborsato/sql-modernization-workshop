@@ -748,33 +748,7 @@ With the `WideWorldImporters` database now running on SQL MI in Azure, the next 
 
 > **Note**: Azure SQL Managed Instance has a private IP address in a dedicated VNet, so to connect an application, you must configure access to the VNet where Managed Instance is deployed. To learn more, read [Connect your application to Azure SQL Managed Instance](https://docs.microsoft.com/azure/azure-sql/managed-instance/connect-application-instance).
 
-### Task 1: Assess the Application with the Data Access Migration Toolkit (Optional)
-
-In this Task, you will install and utilize the Data Access Migration Toolkit Visual Studio Code extension to assess the app to prevent it from hindering a migration from on-premises SQL Server.
-
-1. Launch Visual Studio Code from the start menu. It should already be installed with the Virtual Machine image, but if it is not, [download](https://code.visualstudio.com/Download) and install it.
-
-2. Open the **Extensions** tab (1). Search for the **Data Access Migration Toolkit** (2). Select **Install** (3).
-
-   ![This image shows how to navigate to the Extensions blade in Visual Studio Code and locate and install the Data Access Migration Toolkit.](./media/install-damt-vs-code.png "Installing Data Access Migration Toolkit extension")
-
-3. At the upper left-hand corner of the page, select **File > Open Folder...**. Navigate to `C:\hands-on-lab\MCW-Migrating-SQL-databases-to-Azure-main\Hands-on lab\lab-files\WideWorldImporters.Web` in the dialog. Then, select **Select Folder**.
-
-4. If you are asked to trust the authors of the files in the project folder, select **Yes, I trust the authors**.
-
-5. Enter Ctrl+Shift+P to open the Visual Studio Code extension console. Then, query and select **Data Access: Analyze workspace**.
-
-6. When asked to select a SQL dialect, select **SQL Server**.
-
-   ![This image shows how to select the SQL Server dialect from the list of three dialects in the Visual Studio Code Extension Console.](./media/sql-server-dialect-damt.png "Selecting SQL Server dialect")
-
-7. In the report, the Data Access Migration Toolkit identifies two connection string references (1) and a SQL Query that determines whether the referenced database supports read-write or read-only operations (for Exercise 7).
-
-   ![This image highlights the connection strings (1) and SQL queries (2) determined by the Data Access Migration Toolkit Results summary section.](./media/damt-results-summary.png "Visualizing connection strings and SQL queries in the DAMT assessment")
-
-Because the application utilizes an ORM, there are not many ad-hoc SQL queries that need to be verified for compatibility with the target Azure SQL Managed Instance.
-
-### Task 2: Deploy the web app to Azure
+### Task 1: Deploy the web app to Azure
 
 In this task, you connect to the JumpBox VM and then, using Visual Studio on the JumpBox, deploy the `WideWorldImporters` web application into the App Service in Azure.
 
@@ -789,7 +763,7 @@ In this task, you connect to the JumpBox VM and then, using Visual Studio on the
 
    ![The File Explorer icon is highlighted in the Windows start bar.](media/windows-2019-start-bar-file-explorer.png "Windows start bar")
 
-3. In the File Explorer dialog, navigate to the `C:\hands-on-lab` folder and then drill down to `Migrating-SQL-databases-to-Azure-main\Hands-on lab\lab-files`. In the `lab-files` folder, double-click `WideWorldImporters.sln` to open the solution in Visual Studio.
+3. In the File Explorer dialog, navigate to the `C:\WorldWideImporters-master\WorldWideImporters.Web\` folder and then double-click `WideWorldImporters.Web.csproj` to open the project in Visual Studio.
 
    ![WideWorldImporters.sln is highlighted in the folder at the aforementioned path.](media/windows-explorer-lab-files-web-solution.png "Windows Explorer")
 
@@ -843,49 +817,49 @@ In this task, you update the WWI gamer info web application to connect to and ut
 
 1. In the [Azure portal](https://portal.azure.com), search for **App Services** and select the **App Service** item from the drop down list.
 
-3. In the list of app services, select the **wwi-web-UNIQUEID** App Service from the list of resources.
+2. In the list of app services, select the **wwi-web-UNIQUEID** App Service from the list of resources.
 
    ![The wwi-web-UNIQUEID App Service is highlighted in the list of app services.](media/portal-app-service-search.png "App Services")
 
-4. On the App Service blade, select **Configuration** under Settings on the left-hand side.
+3. On the App Service blade, select **Configuration** under Settings on the left-hand side.
 
    ![The Configuration item is selected under Settings.](media/app-service-configuration-menu.png "Configuration")
 
-5. On the Configuration blade, locate the **Connection strings** section and then select the Pencil (Edit) icon to the right of the `WwiContext` connection string.
+4. On the Configuration blade, locate the **Connection strings** section and then select the Pencil (Edit) icon to the right of the `WwiContext` connection string.
 
    ![In the Connection string section, the pencil icon is highlighted to the right of the WwiContext connection string.](media/app-service-configuration-connection-strings.png "Connection Strings")
 
-6. The value of the connection string should look like this:
+5. The value of the connection string should look like this:
 
    ```sql
    Server=tcp:your-sqlmi-host-fqdn-value,1433;Database=WideWorldImporters;User ID=sqlmiuser;Password=Password.1234567890;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;
    ```
 
-7. In the Add/Edit connection string dialog, replace `your-sqlmi-host-fqdn-value` with the fully qualified domain name for your SQL MI that you copied to a text editor earlier from the Azure Cloud Shell.
+6. In the Add/Edit connection string dialog, replace `your-sqlmi-host-fqdn-value` with the fully qualified domain name for your SQL MI that you copied to a text editor earlier from the Azure Cloud Shell.
 
    ![The your-sqlmi-host-fqdn-value string is highlighted in the connection string.](media/app-service-configuration-edit-conn-string.png "Edit Connection String")
 
-8. The updated value should look similar to the following screenshot. Select **OK**.
+7. The updated value should look similar to the following screenshot. Select **OK**.
 
    ![The updated connection string is displayed, with the fully qualified domain name of SQL MI highlighted within the string.](media/app-service-configuration-edit-conn-string-value.png "Connection string value")
 
-9.  Repeat steps 3 - 7, this time for the `WwiReadOnlyContext` connection string.
+8.  Repeat steps 3 - 7, this time for the `WwiReadOnlyContext` connection string.
 
-10. Select **Save** at the top of the Configuration blade.
+9. Select **Save** at the top of the Configuration blade.
 
     ![The save button on the Configuration blade is highlighted.](media/app-service-configuration-save.png "Save")
 
-11. When prompted that changes to application settings and connection strings will restart your application, select **Continue**.
+10. When prompted that changes to application settings and connection strings will restart your application, select **Continue**.
 
     ![The prompt warning the application will be restarted is displayed, and the Continue button is highlighted.](media/app-service-restart.png "Restart prompt")
 
-12. Select **Overview** to the left of the Configuration blade to return to the overview blade of your App Service.
+11. Select **Overview** to the left of the Configuration blade to return to the overview blade of your App Service.
 
     ![Overview is highlighted on the left-hand menu for App Service](media/app-service-overview-menu-item.png "Overview menu item")
 
-13. At this point, selecting the **URL** for the App Service on the Overview blade still results in an error being return. The error occurs because SQL Managed Instance has a private IP address in its VNet. To connect an application, you need to configure access to the VNet where Managed Instance is deployed, which you handle in the next exercise.
+12. At this point, selecting the **URL** for the App Service on the Overview blade still results in an error being return. The error occurs because SQL Managed Instance has a private IP address in its VNet. To connect an application, you need to configure access to the VNet where Managed Instance is deployed, which you handle in the next exercise.
 
-    ![An error screen is displayed because the application cannot connect to SQL MI within its private virtual network.](media/web-app-error-screen.png "Web App error")
+    ![An error screen is displayed because the application cannot connect to SQL MI within its private virtual network.](media/web-app-error-screen2.png "Web App error")
 
 ## Exercise 4: Integrate App Service with the virtual network
 
