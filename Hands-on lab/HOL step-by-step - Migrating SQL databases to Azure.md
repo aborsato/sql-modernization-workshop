@@ -1017,7 +1017,7 @@ In this task, you review the [Data Discovery and Classification](https://docs.mi
 
 10. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
 
-   ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save-button.png "Save")
+    ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save-button.png "Save")
 
 11. Other recommendations you can review are the **HumanResources - Employee** fields for **NationIDNumber** and **BirthDate**. Note the recommendation service flagged these fields as **Confidential - GDPR**. WWI maintains data about gamers from around the world, including Europe, so having a tool that helps them discover data that may be relevant to GDPR compliance is very helpful.
 
