@@ -48,10 +48,10 @@ Microsoft and the trademarks listed at <https://www.microsoft.com/en-us/legal/in
     - [Task 2: Set point-to-site addresses](#task-2-set-point-to-site-addresses)
     - [Task 3: Configure VNet integration with App Services](#task-3-configure-vnet-integration-with-app-services)
     - [Task 4: Open the web application](#task-4-open-the-web-application)
-  - [Exercise 5: Improve database security posture with Data Discovery and Classification and Azure Defender for SQL](#exercise-5-improve-database-security-posture-with-data-discovery-and-classification-and-azure-defender-for-sql)
+  - [Exercise 5: Improve database security posture with Data Discovery and Classification and Microsoft Defender for SQL](#exercise-5-improve-database-security-posture-with-data-discovery-and-classification-and-azure-defender-for-sql)
     - [Task 1: Configure Data Discovery and Classification](#task-1-configure-data-discovery-and-classification)
-    - [Task 2: Enable Azure Defender for SQL](#task-2-enable-azure-defender-for-sql)
-    - [Task 3: Review an Azure Defender for SQL Vulnerability Assessment](#task-3-review-an-azure-defender-for-sql-vulnerability-assessment)
+    - [Task 2: Enable Microsoft Defender for SQL](#task-2-enable-azure-defender-for-sql)
+    - [Task 3: Review an Microsoft Defender for SQL Vulnerability Assessment](#task-3-review-an-azure-defender-for-sql-vulnerability-assessment)
   - [Exercise 6: Enable Dynamic Data Masking](#exercise-6-enable-dynamic-data-masking)
     - [Task 1: Enable DDM on credit card numbers](#task-1-enable-ddm-on-credit-card-numbers)
     - [Task 2: Apply DDM to email addresses](#task-2-apply-ddm-to-email-addresses)
@@ -88,7 +88,7 @@ The solution begins with using the Microsoft Data Migration Assistant (DMA) to p
 
 The web app is deployed to an Azure App Service Web App using Visual Studio 2019. Once the migrated database's cutover is complete, VNet integration for the `WideWorldImporters` web application is configured. This integration allows the web app to connect to the SQL MI VNet through a virtual network gateway using a point-to-site VPN. The web app's connection strings are updated to point to the new SQL MI database.
 
-In SQL MI, several features of Azure SQL are examined. Azure Defender for SQL is enabled, and Data Discovery and Classification is used to understand better the data and potential compliance issues with data in the database. The Azure Defender for SQL Vulnerability Assessment tool is used to identify potential security vulnerabilities and problems in the database. Those issues listed in the assessment report are used to mitigate one finding by enabling Transparent Data Encryption in the database. Dynamic Data Masking (DDM) is used to prevent sensitive data from appearing when querying the database. Finally, Read Scale-out is used to point reports on WWI's web app to a read-only secondary, allowing reporting to occur without impacting the primary database's performance.
+In SQL MI, several features of Azure SQL are examined. Microsoft Defender for SQL is enabled, and Data Discovery and Classification is used to understand better the data and potential compliance issues with data in the database. The Microsoft Defender for SQL Vulnerability Assessment tool is used to identify potential security vulnerabilities and problems in the database. Those issues listed in the assessment report are used to mitigate one finding by enabling Transparent Data Encryption in the database. Dynamic Data Masking (DDM) is used to prevent sensitive data from appearing when querying the database. Finally, Read Scale-out is used to point reports on WWI's web app to a read-only secondary, allowing reporting to occur without impacting the primary database's performance.
 
 ## Requirements
 
@@ -971,11 +971,11 @@ In this task, you verify your web application now loads, and you can see the hom
 
 You successfully connected your application to the new SQL MI database.
 
-## Exercise 5: Improve database security posture with Data Discovery and Classification and Azure Defender for SQL
+## Exercise 5: Improve database security posture with Data Discovery and Classification and Microsoft Defender for SQL
 
 Duration: 30 minutes
 
-In this exercise, you enable some of the advanced security features of SQL MI and explore some of the security benefits that come with running your database in Azure. [Azure Defender for SQL](https://docs.microsoft.com/azure/azure-sql/database/azure-defender-for-sql) provides advanced SQL security capabilities, including functionality for surfacing and mitigating potential database vulnerabilities and detecting anomalous activities that could indicate a threat to your database. Also, the [Data Discovery and Classification](https://docs.microsoft.com/azure/azure-sql/database/data-discovery-and-classification-overview) tool allows you to discover and classify sensitive data within the database.
+In this exercise, you enable some of the advanced security features of SQL MI and explore some of the security benefits that come with running your database in Azure. [Microsoft Defender for SQL](https://docs.microsoft.com/azure/azure-sql/database/azure-defender-for-sql) provides advanced SQL security capabilities, including functionality for surfacing and mitigating potential database vulnerabilities and detecting anomalous activities that could indicate a threat to your database. Also, the [Data Discovery and Classification](https://docs.microsoft.com/azure/azure-sql/database/data-discovery-and-classification-overview) tool allows you to discover and classify sensitive data within the database.
 
 ### Task 1: Configure Data Discovery and Classification
 
@@ -1033,19 +1033,19 @@ In this task, you review the [Data Discovery and Classification](https://docs.mi
 
     ![The View Report button is highlighted on the toolbar.](media/ads-data-discovery-and-classification-overview-report.png "View report")
 
-### Task 2: Enable Azure Defender for SQL
+### Task 2: Enable Microsoft Defender for SQL
 
-In this task, you enable Azure Defender for SQL for all databases on the Managed Instance.
+In this task, you enable Microsoft Defender for SQL for all databases on the Managed Instance.
 
 1. Return to the **WideWorldImporters** Managed database: type `WideWorldImporters` in the search bar. Click the WideWorldImporters Managed Instance that shows in the popup menu.
 
 4. On the WideWorldImporters Managed database blade, select **Microsoft Defender for Cloud** from the left-hand menu, under Security, and then select **Enable Microsoft Defender for SQL**.
 
-   ![Security center is selected and highlighted in the left-hand menu of the Managed database blade, and the Enable Azure Defender for SQL on the managed instance button is highlighted.](media/sql-mi-ms-defender.png "Azure Defender for SQL")
+   ![Security center is selected and highlighted in the left-hand menu of the Managed database blade, and the Enable Microsoft Defender for SQL on the managed instance button is highlighted.](media/sql-mi-ms-defender.png "Microsoft Defender for SQL")
 
    >**Note**: If Azure Portal redirects you to another page, roll to the botton of the page and enable Microsoft Defender for SQL by clicking **Upgrade**.
    >
-   > ![This image highlights that it is possible for Azure Defender for SQL to be enabled at the subscription-level.](media/azure-defender-upgrade.png "Subscription-level Microsoft Defender for SQL")
+   > ![This image highlights that it is possible for Microsoft Defender for SQL to be enabled at the subscription-level.](media/azure-defender-upgrade.png "Subscription-level Microsoft Defender for SQL")
 
 5. Within a few minutes, Microsoft Defender for SQL is enabled for all databases on the Managed Instance. You will see the two tiles on the Microsoft Defender blade become activated when it has been enabled.
 
@@ -1055,7 +1055,7 @@ In this task, you review an assessment report generated by Microsoft Defender fo
 
 1. At the bottom of the **Microsoft Defender for Cloud** blade for the `WideWorldImporters` Managed database, select **View additional findings in Vulnerability Assessment** in the **Vulnerability assessment findings** tile.
 
-   ![The Vulnerability tile is displayed.](media/ads-vulnerability-assessment-tile.png "Azure Defender for SQL Vulnerability Assessment tile")
+   ![The Vulnerability tile is displayed.](media/ads-vulnerability-assessment-tile.png "Microsoft Defender for SQL Vulnerability Assessment tile")
 
 4. On the Vulnerability Assessment blade, select **Scan** on the toolbar.
 
@@ -1118,7 +1118,7 @@ In this task, you review an assessment report generated by Microsoft Defender fo
 
     > By default, service-managed transparent data encryption is used. A transparent data encryption certificate is automatically generated for the server that contains the database.
 
-14. Return to the Azure portal and select the Azure Defender for SQL's Vulnerability Assessment blade of the `WideWorldImporters` managed database. On the toolbar, select **Scan** to start a new assessment of the database.
+14. Return to the Azure portal and select the Microsoft Defender for SQL's Vulnerability Assessment blade of the `WideWorldImporters` managed database. On the toolbar, select **Scan** to start a new assessment of the database.
 
     ![The Vulnerability assessment scan button is selected in the toolbar.](media/vulnerability-assessment-scan.png "Scan")
 
@@ -1210,7 +1210,7 @@ When inspecting the data in the `WideWorldImporters` database using the ADS Data
 
 ### Task 2: Apply DDM to email addresses
 
-From the findings of the Data Discovery & Classification report in Azure Defender for SQL, you saw that email addresses are labeled Confidential. In this task, you use one of the built-in functions for making email addresses using DDM to help protect this information.
+From the findings of the Data Discovery & Classification report in Microsoft Defender for SQL, you saw that email addresses are labeled Confidential. In this task, you use one of the built-in functions for making email addresses using DDM to help protect this information.
 
 1. For this, you target the `LoginEmail` field in the `[dbo].[Gamer]` table. Open a new query window and execute the following script:
 
