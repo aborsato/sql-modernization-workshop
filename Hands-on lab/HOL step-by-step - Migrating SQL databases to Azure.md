@@ -460,41 +460,29 @@ In this task, you use the Azure Cloud shell to retrieve the information necessar
 
 ### Task 5: Create a service principal
 
-In this task, use the Azure Cloud Shell to create an Azure Active Directory (Azure AD) application and service principal (SP) that will provide DMS access to Azure SQL MI. You will grant the SP permissions to the hands-on-lab-SUFFIX resource group and your subscription.
+In this task, use the Azure Cloud Shell to grant access to the service principal at subscription level. The service principal will run the Data Migration Service.
 
 > **Important**: You must have sufficient rights within your Azure AD tenant to create an Azure Active Directory application and service principal and assign roles on your subscription to complete this task.
 
-1. Next, at the Cloud Shell prompt, issue a command to create a service principal named **wide-world-importers** and assign it contributor permissions to your **hands-on-lab-SUFFIX** resource group.
+1. Next, at the Cloud Shell prompt, issue a command to create a service principal named **wide-world-importers** and assign it contributor permissions to your subscription.
 
-2. First, you need to retrieve your subscription ID. Enter the following at the Cloud Shell prompt:
-
-   ```powershell
-   az account list --output table
-   ```
-
-3. In the output table, locate the subscription you are using for this hands-on lab. Copy the SubscriptionId value and use it to replace `<your-subscription-id>` in the command below. Run the completed command at the CLI command prompt.
-
-   ```powershell
-   $subscriptionId = "<your-subscription-id>"
-   ```
-
-4. In the Cloud Lab portal, select **Environment Details** tab, **Service Principal Details** and copy the **Application Id** credentials.
+2. In the Cloud Lab portal, select **Environment Details** tab, **Service Principal Details** and copy the **Application Id** credentials.
 
    ![The service principal's application ID is listed in the Cloud Lab under Service Principal Details.](media/lab-environment-application-id.png "Service Principal Details")
 
-5. Run this command in at the CLI command prompt:
+3. Run this command in at the CLI command prompt:
 
    ```powershell
    $applicationId = "[Application Id]"
    ```
 
-6. Give permission (at subscription level) to the app so it can run the migration project:
+4. Give permission (at subscription level) to the app so it can run the migration project:
 
    ```powershell
    az role assignment create --assignee $applicationId --role contributor
    ```
 
-6. Run this command to see the list of RBAC assignments for this service principal:
+5. Run this command to see the list of RBAC assignments for this service principal:
 
    ```powershell
    az role assignment list --all --assignee $applicationId --query "[].{role:roleDefinitionName, scope:scope}" --output table
@@ -677,53 +665,36 @@ GO
 
 In this task, you connect to the SQL MI database using SSMS and quickly verify the migration.
 
-1. First, use the Azure Cloud Shell to retrieve the fully qualified domain name of your SQL MI database. In the [Azure portal](https://portal.azure.com), select the Azure Cloud Shell icon from the top menu.
+1. First, open Azure Portal and type `sqlmi-` in the search bar. Wait until the portal shows quick access to the resources in the popup window and click the SQL managed instance that starts with `sqlmi-`.
 
-   ![The Azure Cloud Shell icon is highlighted in the Azure portal's top menu.](media/cloud-shell-icon.png "Azure Cloud Shell")
+   ![Search for resources in the Azure portal.](media/azure-portal-sqlmi-search.png "Azure Portal")
 
-2. In the Cloud Shell window that opens at the bottom of your browser window, select **PowerShell**.
+2. In the SQL managed instance blade, copy the property `Host` from the Overview page.
 
-   ![In the Welcome to Azure Cloud Shell window, PowerShell is highlighted.](media/cloud-shell-select-powershell.png "Azure Cloud Shell")
+   ![Copy the Host property.](media/sql-mi-overview-host.png "SQL managed instance overview")
 
-3. After a moment, a message is displayed that you have successfully requested a Cloud Shell and be presented with a PS Azure prompt.
-
-   ![In the Azure Cloud Shell dialog, a message is displayed that requesting a Cloud Shell succeeded, and the PS Azure prompt is displayed.](media/cloud-shell-ps-azure-prompt.png "Azure Cloud Shell")
-
-4. At the prompt, retrieve information about SQL MI in the hands-on-lab-SUFFIX resource group by entering the following PowerShell command, **replacing `<your-resource-group-name>`** in the resource group name variable with the name of your resource group:
-
-   ```powershell
-   $resourceGroup = "cloud-rg"
-   az sql mi list --resource-group $resourceGroup
-   ```
-
-   > **Note**: If you have multiple Azure subscriptions, and the account you are using for this hands-on lab is not your default account, you may need to run `az account list --output table` at the Azure Cloud Shell prompt to output a list of your subscriptions. Copy the Subscription Id of the account you are using for this lab and then run `az account set --subscription <your-subscription-id>` to set the appropriate account for the Azure CLI commands.
-
-5. Within the above command's output, locate and copy the value of the `fullyQualifiedDomainName` property. Paste the value into a text editor, such as Notepad.exe, for reference below.
-
-   ![The output from the az sql mi list command is displayed in the Cloud Shell, and the fullyQualifiedDomainName property and value are highlighted.](media/cloud-shell-az-sql-mi-list-output.png "Azure Cloud Shell")
-
-6. Return to SSMS on your SqlServer2008 VM, and then select **Connect** and **Database Engine** from the Object Explorer menu.
+3. Return to SSMS on your SqlServer2008 VM, and then select **Connect** and **Database Engine** from the Object Explorer menu.
 
    ![In the SSMS Object Explorer, Connect is highlighted in the menu, and Database Engine is highlighted in the Connect context menu.](media/ssms-object-explorer-connect.png "SSMS Connect")
 
-7. In the Connect to Server dialog, enter the following:
+4. In the Connect to Server dialog, enter the following:
 
    - **Server name**: Enter the fully qualified domain name of your SQL managed instance, which you copied from the Azure Cloud Shell in the previous steps.
    - **Authentication**: Select **SQL Server Authentication**.
    - **Login**: Enter `sqlmiuser`
    - **Password**: Use the password provided in the ARM template deployment (default is `Password.1234567890`)
 
-8. Select **Connect**.
+5. Select **Connect**.
 
    ![The SQL managed instance details specified above are entered into the Connect to Server dialog.](media/ssms-connect-to-server-sql-mi.png "Connect to Server")
 
-9. The SQL MI connection appears below the SQLSERVER2008 connection. Expand Databases the SQL MI connection and select the `WideWorldImporters` database.
+6. The SQL MI connection appears below the SQLSERVER2008 connection. Expand Databases the SQL MI connection and select the `WideWorldImporters` database.
 
-10. With the `WideWorldImporters` database selected, select **New Query** on the SSMS toolbar to open a new query window.
+7. With the `WideWorldImporters` database selected, select **New Query** on the SSMS toolbar to open a new query window.
 
    ![In the SSMS Object Explorer, the SQL MI connection is expanded, and the WideWorldImporters database is highlighted and selected.](media/ssms-sql-mi-database.png "SSMS Object Explorer")
 
-11. In the new query window, enter the following SQL script:
+8. In the new query window, enter the following SQL script:
 
     ```sql
     USE WideWorldImporters;
@@ -732,11 +703,11 @@ In this task, you connect to the SQL MI database using SSMS and quickly verify t
     SELECT * FROM Game
     ```
 
-12. Select **Execute** on the SSMS toolbar to run the query. Observe the records contained within the `Game` table, including the new `Space Adventure` game you added after initiating the migration process.
+9. Select **Execute** on the SSMS toolbar to run the query. Observe the records contained within the `Game` table, including the new `Space Adventure` game you added after initiating the migration process.
 
     ![In the new query window, the query above has been entered, and in the results pane, the new Space Adventure game is highlighted.](media/ssms-query-game-table.png "SSMS Query")
 
-13. You are done using the SqlServer2008 VM. **Close** any open windows and **log off** the VM.
+10. You are done using the SqlServer2008 VM. **Close** any open windows and **log off** the VM.
 
 The JumpBox VM is used for the remaining tasks of this hands-on lab.
 
@@ -1037,25 +1008,27 @@ In this exercise, you enable some of the advanced security features of SQL MI an
 
 In this task, you review the [Data Discovery and Classification](https://docs.microsoft.com/azure/azure-sql/database/data-discovery-and-classification-overview) feature of Azure SQL. Data Discovery & Classification introduces a new tool for discovering, classifying, labeling, and reporting sensitive data in your databases. It introduces a set of advanced services, forming a new SQL Information Protection paradigm aimed at protecting the data in your database, not just the database. Discovering and classifying your most sensitive data (e.g., business, financial, healthcare) can play a pivotal role in your organizational information protection stature.
 
-1. On the WideWorldImporters Managed database blade, select the **Data Discovery & Classification** from the left-hand menu.
+1. Open Azure Portal and type `WideWorldImporters` in the search bar. Click the WideWorldImporters Managed Instance that shows in the popup menu.
 
-2. In the **Data Discovery & Classification** blade, select the info link with the message, **We have found 35 columns with classification recommendations**.
+2. On the WideWorldImporters Managed database blade, select the **Data Discovery & Classification** from the left-hand menu.
+
+3. In the **Data Discovery & Classification** blade, select the info link with the message, **We have found 35 columns with classification recommendations**.
 
    ![The Data Discovery & Classification tile is displayed.](media/ads-data-discovery-and-classification-pane.png "Data Discovery & Classification Dashboard")
 
-3. Look over the list of recommendations to get a better understanding of the types of data and classifications that can be assigned, based on the built-in classification settings. In the list of classification recommendations, select the recommendation for the **Sales - CreditCard - CardNumber** field.
+4. Look over the list of recommendations to get a better understanding of the types of data and classifications that can be assigned, based on the built-in classification settings. In the list of classification recommendations, select the recommendation for the **Sales - CreditCard - CardNumber** field.
 
    ![The CreditCard number recommendation is highlighted in the recommendations list.](media/ads-data-discovery-and-classification-recommendations-credit-card.png "Data Discovery & Classification")
 
-4. Due to the risk of exposing credit card information, WWI would like a way to classify it as highly confidential, not just **Confidential**, as the recommendation suggests. To correct this, select **+ Add classification** at the top of the Data Discovery & Classification blade.
+5. Due to the risk of exposing credit card information, WWI would like a way to classify it as highly confidential, not just **Confidential**, as the recommendation suggests. To correct this, select **+ Add classification** at the top of the Data Discovery & Classification blade.
 
    ![The +Add classification button is highlighted in the toolbar.](media/ads-data-discovery-and-classification-add-classification-button.png "Data Discovery & Classification")
 
-5. Quickly expand the **Sensitivity label** field and review the various built-in labels from which you can choose. You can also add custom labels, should you desire.
+6. Quickly expand the **Sensitivity label** field and review the various built-in labels from which you can choose. You can also add custom labels, should you desire.
 
    ![The list of built-in Sensitivity labels is displayed.](media/ads-data-discovery-and-classification-sensitivity-labels.png "Data Discovery & Classification")
 
-6. In the Add classification dialog, enter the following:
+7. In the Add classification dialog, enter the following:
 
    - **Schema name**: Select **Sales**.
    - **Table name**: Select **CreditCard**.
@@ -1063,27 +1036,27 @@ In this task, you review the [Data Discovery and Classification](https://docs.mi
    - **Information type**: Select **Credit Card**.
    - **Sensitivity level**: Select **Highly Confidential**.
 
-7. Select **Add classification**.
+8. Select **Add classification**.
 
    ![The values specified above are entered into the Add classification dialog.](media/ads-data-discovery-and-classification-add-classification.png "Add classification")
 
-8. Notice the **Sales - CreditCard - CardNumber** field disappears from the recommendations list, and the number of recommendations drops by 1.
+9. Notice the **Sales - CreditCard - CardNumber** field disappears from the recommendations list, and the number of recommendations drops by 1.
 
-9. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
+10. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
 
    ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save-button.png "Save")
 
-10. Other recommendations you can review are the **HumanResources - Employee** fields for **NationIDNumber** and **BirthDate**. Note the recommendation service flagged these fields as **Confidential - GDPR**. WWI maintains data about gamers from around the world, including Europe, so having a tool that helps them discover data that may be relevant to GDPR compliance is very helpful.
+11. Other recommendations you can review are the **HumanResources - Employee** fields for **NationIDNumber** and **BirthDate**. Note the recommendation service flagged these fields as **Confidential - GDPR**. WWI maintains data about gamers from around the world, including Europe, so having a tool that helps them discover data that may be relevant to GDPR compliance is very helpful.
 
     ![GDPR information is highlighted in the list of recommendations](media/ads-data-discovery-and-classification-recommendations-gdpr.png "Data Discovery & Classification")
 
-11. Check the **Select all** checkbox at the top of the list to select all the remaining recommended classifications, and then select **Accept selected recommendations**.
+12. Check the **Select all** checkbox at the top of the list to select all the remaining recommended classifications, and then select **Accept selected recommendations**.
 
-12. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
+13. Select **Save** on the toolbar of the Data Classification window. It may take several minutes for the save to complete.
 
     ![Save the updates to the classified columns list.](media/ads-data-discovery-and-classification-save.png "Save")
 
-13. When the save completes, select the **Overview** tab on the Data Discovery & Classification blade to view a report with a full summary of the database classification state.
+14. When the save completes, select the **Overview** tab on the Data Discovery & Classification blade to view a report with a full summary of the database classification state.
 
     ![The View Report button is highlighted on the toolbar.](media/ads-data-discovery-and-classification-overview-report.png "View report")
 
@@ -1091,43 +1064,25 @@ In this task, you review the [Data Discovery and Classification](https://docs.mi
 
 In this task, you enable Azure Defender for SQL for all databases on the Managed Instance.
 
-1. In the [Azure portal](https://portal.azure.com), select **Resource groups** from the Azure services list.
+1. Return to the **WideWorldImporters** Managed database: type `WideWorldImporters` in the search bar. Click the WideWorldImporters Managed Instance that shows in the popup menu.
 
-   ![Resource groups is highlighted in the Azure services list.](media/azure-services-resource-groups.png "Azure services")
+4. On the WideWorldImporters Managed database blade, select **Microsoft Defender for Cloud** from the left-hand menu, under Security, and then select **Enable Microsoft Defender for SQL**.
 
-2. Select the hands-on-lab-SUFFIX resource group from the list.
+   ![Security center is selected and highlighted in the left-hand menu of the Managed database blade, and the Enable Azure Defender for SQL on the managed instance button is highlighted.](media/sql-mi-ms-defender.png "Azure Defender for SQL")
 
-   ![Resource groups is selected in the Azure navigation pane, and the "hands-on-lab-SUFFIX" resource group is highlighted.](./media/resource-groups.png "Resource groups list")
-
-3. Select the **WideWorldImporters** Managed database resource from the list.
-
-   ![The WideWorldImporters Managed Database is highlighted in the resources list.](media/resources-sql-mi-database.png "Resources")
-
-4. On the WideWorldImporters Managed database blade, select **Security center** from the left-hand menu, under Security, and then select **Enable Azure Defender for SQL on the managed instance**.
-
-   ![Security center is selected and highlighted in the left-hand menu of the Managed database blade, and the Enable Azure Defender for SQL on the managed instance button is highlighted.](media/sql-mi-managed-database-azure-defender-for-sql-enable.png "Azure Defender for SQL")
-
-   >**Note**: If you do not see this button, Azure Defender for SQL may be already enabled at the subscription level. In that case, feel free to move on to the next Task.
+   >**Note**: If Azure Portal redirects you to another page, roll to the botton of the page and enable Microsoft Defender for SQL by clicking **Upgrade**.
    >
-   > ![This image highlights that it is possible for Azure Defender for SQL to be enabled at the subscription-level.](./media/azure-defender-enabled-at-subscription-level.png "Subscription-level Azure Defender for SQL")
+   > ![This image highlights that it is possible for Azure Defender for SQL to be enabled at the subscription-level.](media/azure-defender-upgrade.png "Subscription-level Microsoft Defender for SQL")
 
-5. Within a few minutes, Azure Defender for SQL is enabled for all databases on the Managed Instance. You will see the two tiles on the Azure Defender blade become activated when it has been enabled.
+5. Within a few minutes, Microsoft Defender for SQL is enabled for all databases on the Managed Instance. You will see the two tiles on the Microsoft Defender blade become activated when it has been enabled.
 
-### Task 3: Review an Azure Defender for SQL Vulnerability Assessment
+### Task 3: Review an Microsoft Defender for SQL Vulnerability Assessment
 
-In this task, you review an assessment report generated by Azure Defender for the `WideWorldImporters` database and take action to remediate one of the findings in the `WideWorldImporters` database. The [SQL Vulnerability Assessment service](https://docs.microsoft.com/azure/sql-database/sql-vulnerability-assessment) is a service that provides visibility into your security state and includes actionable steps to resolve security issues and enhance your database security.
+In this task, you review an assessment report generated by Microsoft Defender for the `WideWorldImporters` database and take action to remediate one of the findings in the `WideWorldImporters` database. The [SQL Vulnerability Assessment service](https://docs.microsoft.com/azure/sql-database/sql-vulnerability-assessment) is a service that provides visibility into your security state and includes actionable steps to resolve security issues and enhance your database security.
 
-1. At the bottom of the **Security center** blade for the `WideWorldImporters` Managed database, select **View additional findings in Vulnerability Assessment** in the **Vulnerability assessment findings** tile.
+1. At the bottom of the **Microsoft Defender for Cloud** blade for the `WideWorldImporters` Managed database, select **View additional findings in Vulnerability Assessment** in the **Vulnerability assessment findings** tile.
 
    ![The Vulnerability tile is displayed.](media/ads-vulnerability-assessment-tile.png "Azure Defender for SQL Vulnerability Assessment tile")
-
-2. Select **Click here to configure a storage account for storing scan results**.
-
-   ![This image highlights the Click here to configure a storage account for storing scan results link on the Vulnerability Assessment page.](./media/vulnerability-assessment-storage-account.png "Click here to configure a storage account for storing scan results in Vulnerability Assessment page")
-
-3. On the **Server settings** window, select the storage account deployed with the lab and disable **Periodic recurring scans**. Then, select **Save**.
-
-   ![This image highlights the storage account configured to store the vulnerability assessment and the Save button on the Server settings window.](./media/configure-assessment-storage-account.png "Configuring storage account on the Server settings page")
 
 4. On the Vulnerability Assessment blade, select **Scan** on the toolbar.
 
